@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAJINS | UNBLOCKED</title>
+    <style>
+        /* --- HACKER UI THEME --- */
+        body {
+            background-color: #050505;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* --- MATRIX HEADER SECTION --- */
+        header {
+            position: relative;
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 2px solid #00ff41;
+            background: black;
+            overflow: hidden;
+        }
+
+        h1 { 
+            position: relative; 
+            z-index: 10;
+            margin: 0; 
+            letter-spacing: 8px; 
+            font-size: 2.8rem;
+            text-shadow: 0 0 15px #00ff41;
+            pointer-events: none;
+        }
+
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* --- COMMAND TERMINAL --- */
+        #terminal-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px;
+            border: 1px solid #00ff41;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+        }
+
+        #command-line {
+            background: transparent;
+            border: none;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            width: 180px;
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* --- MAIN VIEWPORT --- */
+        #game-display {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            position: relative;
+        }
+
+        iframe {
+            width: 92%;
+            height: 88%;
+            border: 1px solid #00ff41;
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.3);
+            background: #000;
+        }
+
+        #status-text {
+            margin: 10px 0;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* --- HORIZONTAL SCROLL WHEEL --- */
+        .scroll-wheel {
+            background: #0a0a0a;
+            padding: 25px 0;
+            border-top: 1px solid #333;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: thin;
+            scrollbar-color: #00ff41 #000;
+        }
+
+        .scroll-wheel::-webkit-scrollbar { height: 6px; }
+        .scroll-wheel::-webkit-scrollbar-thumb { background: #00ff41; }
+
+        .game-card {
+            display: inline-block;
+            width: 170px;
+            height: 95px;
+            margin: 0 15px;
+            background: #111;
+            border: 1px solid #00ff41;
+            text-align: center;
+            line-height: 95px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #00ff41;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: #00ff41;
+            color: black;
+            box-shadow: 0 0 20px #00ff41;
+        }
+
+        /* --- SECRET MODULE --- */
+        .secret {
+            background: #ff003c;
+            color: white;
+            border-color: #fff;
+            display: none; 
+            animation: glitch 0.25s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); text-shadow: -2px 0 red, 2px 0 blue; }
+            50% { transform: translate(1px, -1px); text-shadow: 2px 0 red, -2px 0 blue; }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <canvas id="matrix-canvas"></canvas>
+        <div id="terminal-container">
+            <span>>_</span>
+            <input type="text" id="command-line" placeholder="SYS_ACCESS_CODE..." autocomplete="off">
+        </div>
+        <h1>MAJINS UNBLOCKED</h1>
+    </header>
+
+    <main id="game-display">
+        <p id="status-text">>_ SYSTEM_IDLE: SELECT_GAME_CARTRIDGE</p>
+        </main>
+
+    <div class="scroll-wheel">
+        <div class="game-card" onclick="loadGame('https://www.roblox.com/games/8737899170/')">ROBLOX</div>
+        <div class="game-card" onclick="loadGame('https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/stoppblok@main/slope/slope.xml')">SLOPE</div>
+        <div class="game-card" onclick="loadGame('https://geometry-dash.io/game/geometry-dash-lite/')">GEO DASH</div>
+        <div class="game-card" onclick="loadGame('https://1v1.lol')">1V1.LOL</div>
+        <div class="game-card" onclick="loadGame('https://bitlifeonline.io/')">BITLIFE</div>
+        <div class="game-card" onclick="loadGame('https://monkey-mart.org/game/monkey-mart/')">MONKEY MART</div>
+        
+        <div id="secret-card" class="game-card secret" onclick="loadGame('https://prizm.js.org/')">VICTORS_ONLY</div>
+    </div>
+
+    <script>
+        // --- MATRIX RAIN EFFECT ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = 200;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$#@%";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff41";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 35);
+
+        // --- CORE GAME ENGINE ---
+        function loadGame(url) {
+            const display = document.getElementById('game-display');
+            display.innerHTML = `
+                <p id="status-text">>_ EXECUTING_PROGRAM...</p>
+                <iframe src="${url}" frameborder="0" allowfullscreen></iframe>
+            `;
+            document.getElementById('status-text').style.color = "#00ff41";
+        }
+
+        // --- TERMINAL COMMANDS ---
+        const cmdInput = document.getElementById('command-line');
+        const status = document.getElementById('status-text');
+
+        cmdInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const val = cmdInput.value.toLowerCase().trim();
+                cmdInput.value = '';
+                
+                if (val === 'victors') {
+                    document.getElementById('secret-card').style.display = 'inline-block';
+                    const sText = document.getElementById('status-text');
+                    sText.innerText = ">_ BYPASS_SUCCESS: VICTOR_PROTOCOL_ENGAGED";
+                    sText.style.color = "#ff003c";
+                } else if (val === 'clear') {
+                    location.reload();
+                } else {
+                    const sText = document.getElementById('status-text');
+                    sText.innerText = ">_ ERROR: INVALID_CREDENTIALS";
+                    sText.style.color = "#ff003c";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
